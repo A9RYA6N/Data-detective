@@ -9,7 +9,7 @@ def getCleanUrl(url: str):
 async def connectToPage(url: str):
     async with ap() as p:
         browser = await p.chromium.launch(
-            headless=False
+            headless=True
         )
         
         url = getCleanUrl(url)
