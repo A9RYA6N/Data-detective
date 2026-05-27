@@ -14,4 +14,8 @@ def createProduct(db: Session, data: dict):
     db.refresh(product)
     return product
 
+def getAllProducts(db: Session):
+    products = db.query(Product).all()
+    return products
+
 # def getProductById(db: Session, )
