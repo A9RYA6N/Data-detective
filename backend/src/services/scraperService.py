@@ -23,8 +23,11 @@ async def connectToPage(url: str):
         )
 
         #source, product identifier, product url, seller
+        #landingImage
         title = await page.title()
         actualName = await page.locator("#productTitle").first.text_content()
+        imgSrc = await page.query_selector("#landingImage")
+        imgUrl = await imgSrc.get_attribute("src")
         price = await page.locator(".a-price-whole").first.text_content()
         currency = await page.locator(".a-price-symbol").first.text_content()
         mrp = await page.locator(".apex-basisprice-value .a-offscreen").first.text_content()
@@ -34,10 +37,17 @@ async def connectToPage(url: str):
         source = url.split(".")[1]
         productIdentifier = url.split("dp/")[1]
 
-        rows = page.locator("#poExpander table tr")
-        print(rows)
-        count = await rows.count()
-        print(count)
+        tableLocators=["#productOverview_feature_div table tr", "#poExpander table tr"]
+        count=0
+        for locator in tableLocators:
+            print(locator)
+            rows = page.locator(locator)
+            print(rows)
+            count = await rows.count()
+            print(count)
+            if count>0:
+                break
+        
         miscDetails={}
         for i in range(count):
             row = rows.nth(i)
@@ -52,6 +62,7 @@ async def connectToPage(url: str):
         reviewScore = reviewScore.strip()
         reviewScore = reviewScore[:3]
         reviewCount = reviewCount.replace("(", "").replace(")", "").replace(",", "")
+        print(miscDetails)
         seller = miscDetails["Brand"]
         discountPercentage = discountPercentage.replace("-", "").replace("%", "")
         # miscDetails = json.dumps(miscDetails)
@@ -78,6 +89,7 @@ async def connectToPage(url: str):
             "source": source,
             "product_identifier": productIdentifier,
             "product_url": url,
+            "image_url": imgUrl,
             "name": actualName,
             "currency": currency,
             "price": float(price),

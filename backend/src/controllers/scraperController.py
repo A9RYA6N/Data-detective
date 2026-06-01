@@ -11,17 +11,17 @@ async def scrapeController(url: Url, db: Session):
         print(key, value, type(value))
     
     product = createProduct(db, data)
-    print(product.id)
 
     return{
         "success": True,
-        "message": "Scraped data"
+        "message": "Scraped data",
+        "data": product
     }
 
 async def getAllDataController(db: Session):
     data = getAllProducts(db)
     return{
-        "success":True,
-        "message":"Data fetched successfully",
+        "success": True,
+        "message": "Data fetched successfully",
         "data": data
     }

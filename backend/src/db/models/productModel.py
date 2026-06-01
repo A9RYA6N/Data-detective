@@ -16,6 +16,7 @@ class Product(Base):
     source = Column(String, nullable=False)
     product_identifier = Column(String, nullable=False)
     product_url = Column(String, nullable=False)
+    image_url = Column(String)
     name = Column(Text)
     currency = Column(String)
     price = Column(Numeric(10, 2))
