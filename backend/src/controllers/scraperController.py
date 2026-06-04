@@ -18,8 +18,8 @@ async def scrapeController(url: Url, db: Session):
 
     return{
         "success": True,
-        "message": "Scraped data",
-        "data": product
+        "message": "Scraped data" if product["existed"]==False else "Already had data",
+        "data": product["product"]
     }
 
 async def getAllDataController(db: Session):

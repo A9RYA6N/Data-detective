@@ -6,13 +6,19 @@ def createProduct(db: Session, data: dict):
         Product.product_identifier == data["product_identifier"]
     ).first()
     if existingProduct:
-        return existingProduct
+        return {
+            "product": existingProduct,
+            "existed": True
+        }
 
     product = Product(**data)
     db.add(product)
     db.commit()
     db.refresh(product)
-    return product
+    return {
+        "product": product, 
+        "existed": False
+    }
 
 def getAllProducts(db: Session):
     products = db.query(Product).all()
