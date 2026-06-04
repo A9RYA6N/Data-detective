@@ -55,7 +55,6 @@ async def connectToPage(url: str):
             value = await row.locator("td:nth-child(2)").inner_text()
             miscDetails[key.strip()]=value.strip() 
 
-        
         price = price.replace(",", "").replace(".", "").strip()
         actualName = actualName.strip()
         mrp = mrp[1:].replace(",", "").strip()

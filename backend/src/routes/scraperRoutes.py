@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from sqlalchemy.orm import Session
 
-from src.controllers.scraperController import scrapeController, getAllDataController
+from src.controllers.scraperController import scrapeController, getAllDataController, rescrapeDataController
 from src.schema.request import Url
 from src.config.db import getDb
 
@@ -14,3 +14,7 @@ async def scrape(url: Url, db: Session=Depends(getDb)):
 @router.get("/api/")
 async def getAllData(db: Session=Depends(getDb)):
     return await getAllDataController(db)
+
+@router.get("/api/scrape/all")
+async def rescrapeAllData(request: Request):
+    return await rescrapeDataController(request)

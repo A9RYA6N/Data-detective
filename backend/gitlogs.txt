@@ -1,0 +1,1 @@
+Committed and pushed on 2026-06-02 02:37 AM with message: 'Added new image url column, ran alembic migration, added simple streamlit frontend for prototyping, created gitscript for easier git actions and logging'

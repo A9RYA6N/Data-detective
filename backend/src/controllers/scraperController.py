@@ -1,8 +1,12 @@
 from sqlalchemy.orm import Session
-
+from fastapi import Request
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from src.schema.request import Url
 from src.services.scraperService import connectToPage
-from src.db.repo.productRepo import createProduct, getAllProducts
+from src.db.repo.productRepo import createProduct, getAllProducts, getAllProductsUrlAndId
+from src.services.rescrapeService import rescrapeData
+from datetime import datetime
+from zoneinfo import ZoneInfo
 
 async def scrapeController(url: Url, db: Session):
     data = await connectToPage(url.url)
@@ -24,4 +28,16 @@ async def getAllDataController(db: Session):
         "success": True,
         "message": "Data fetched successfully",
         "data": data
+    }
+
+async def rescrapeDataController(request: Request):
+    scheduler: AsyncIOScheduler = request.app.state.scheduler
+
+    scheduler.modify_job(
+        job_id="weekly_scraper_job",
+        next_run_time=datetime.now(ZoneInfo("Asia/Kolkata"))
+    )
+    return{
+        "success": True,
+        "message": "Rescraper in progress",
     }

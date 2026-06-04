@@ -46,7 +46,7 @@ esac
 getcurrenttime
 
 if [ ${CONFIRM_PUSH,,} = y ] || [ ${CONFIRM_PUSH,,} = yes ]; then
-    echo -e "Committed and pushed on $DATE_DATA with message: '$COMMIT_MESSAGE'\n" >> gitlogs.txt
+    echo "Committed and pushed on $DATE_DATA with message: '$COMMIT_MESSAGE'" >> gitlogs.txt
 else
-    echo -e "Committed on $DATE_DATA with message: '$COMMIT_MESSAGE'\n" >> gitlogs.txt
+    echo "Committed on $DATE_DATA with message: '$COMMIT_MESSAGE'" >> gitlogs.txt
 fi
