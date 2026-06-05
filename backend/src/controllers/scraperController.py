@@ -3,13 +3,29 @@ from fastapi import Request
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from src.schema.request import Url
 from src.services.scraperService import connectToPage
-from src.db.repo.productRepo import createProduct, getAllProducts, getAllProductsUrlAndId
-from src.services.rescrapeService import rescrapeData
+from src.db.repo.productRepo import createProduct, getAllProducts, getProductByIdentifier
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
+def getCleanUrl(url: str):
+    cleanUrl = url.split("/?")[0]
+    cleanUrl = cleanUrl.split("/ref")[0]
+    return cleanUrl
+
 async def scrapeController(url: Url, db: Session):
-    data = await connectToPage(url.url)
+    urlString = url.url
+    urlString = getCleanUrl(urlString)
+
+    prod_identifier = urlString.split("/")[-1]
+    prod = getProductByIdentifier(db, prod_identifier)
+    if prod["exists"]:
+        return {
+            "success": True,
+            "message": "Already had data",
+            "data": prod["data"]
+        }
+    
+    data = await connectToPage(urlString)
     print(data)
     for key, value in data.items():
         print(key, value, type(value))
@@ -18,7 +34,7 @@ async def scrapeController(url: Url, db: Session):
 
     return{
         "success": True,
-        "message": "Scraped data" if product["existed"]==False else "Already had data",
+        "message": "Scraped data",
         "data": product["product"]
     }
 

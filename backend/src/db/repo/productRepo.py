@@ -31,4 +31,16 @@ def getAllProductsUrlAndId(db: Session):
     print(prodIdentifiers)
     return result
 
+def getProductByIdentifier(db: Session, product_identifier: str):
+    prod = db.query(Product).where(Product.product_identifier == product_identifier).first()
+    if prod:
+        return {
+            "exists": True,
+            "data": prod
+        }
+    return {
+        "exists": False,
+        "data": None
+    }
+
 # def getProductById(db: Session, )

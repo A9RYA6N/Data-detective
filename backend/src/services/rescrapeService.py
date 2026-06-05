@@ -15,6 +15,10 @@ async def rescrapeData():
         )
         i=0
         page = await browser.new_page()
+        await page.route("**/*", lambda route:
+                    route.abort() if route.request.resource_type in ["image", "media", "font", "stylesheet"]
+                    else route.continue_())
+        
         for product in data:
             i+=1
             print("Rescraping all data, Count:", i)

@@ -1,20 +1,18 @@
 from playwright.async_api import async_playwright as ap
 import json
 
-def getCleanUrl(url: str):
-    cleanUrl = url.split("/?")[0]
-    cleanUrl = cleanUrl.split("/ref")[0]
-    return cleanUrl
-
 async def connectToPage(url: str):
     async with ap() as p:
         browser = await p.chromium.launch(
-            headless=True
+            headless=False
         )
         
-        url = getCleanUrl(url)
         print(url)
         page = await browser.new_page()
+
+        await page.route("**/*", lambda route:
+                         route.abort() if route.request.resource_type in ["image", "media", "font", "stylesheet"]
+                         else route.continue_())
 
         await page.goto(
             url,
@@ -35,7 +33,7 @@ async def connectToPage(url: str):
         reviewCount = await page.locator("#acrCustomerReviewText").first.text_content()
         reviewScore = await page.locator(".mvt-cm-cr-review-stars-mini-popover").first.text_content()
         source = url.split(".")[1]
-        productIdentifier = url.split("dp/")[1]
+        productIdentifier = url.split("/")[-1]
 
         tableLocators=["#productOverview_feature_div table tr", "#poExpander table tr"]
         count=0
