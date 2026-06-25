@@ -4,6 +4,7 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from src.schema.request import Url
 from src.services.scraperService import connectToPage
 from src.db.repo.productRepo import createProduct, getAllProducts, getProductByIdentifier
+from src.db.repo.snapshotRepo import getAllSnapshots
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
@@ -56,4 +57,12 @@ async def rescrapeDataController(request: Request):
     return{
         "success": True,
         "message": "Rescraper in progress",
+    }
+
+async def getAllSnapshotsController(db: Session):
+    data = getAllSnapshots(db)
+    return{
+        "success": True,
+        "message": "Data fetched successfully",
+        "data": data
     }

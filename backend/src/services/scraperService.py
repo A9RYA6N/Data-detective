@@ -4,7 +4,7 @@ import json
 async def connectToPage(url: str):
     async with ap() as p:
         browser = await p.chromium.launch(
-            headless=False
+            headless=True
         )
         
         print(url)

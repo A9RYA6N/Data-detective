@@ -7,3 +7,7 @@ def createSnapshot(db: Session, data: dict):
     db.commit()
     db.refresh(snapshot)
     return snapshot
+
+def getAllSnapshots(db: Session):
+    snapshots = db.query(Snapshot).all()
+    return snapshots
